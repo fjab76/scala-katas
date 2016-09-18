@@ -50,3 +50,30 @@ db.getCollection('linkDocument').find({"depth":1}).forEach(function(current){
     total += current.childLinks[0].length
 })
 print("total: " + total)
+
+
+//date of first and last record
+db.getCollection('linkDocument').aggregate([
+    {
+        $group:{
+            _id: "$seed",
+            maxDate: {$max: "$date"},
+            minDate: {$min: "$date"}
+        }
+    }
+]);
+
+db.getCollection('linkDocument').aggregate([
+    {
+        $match:{
+            "depth" : 2, "date" : {$gt : ISODate("2016-09-18T21:40:42.147Z")}
+        }
+    },
+    {
+        $group:{
+            _id: "$seed",
+            maxDate: {$max: "$date"},
+            minDate: {$min: "$date"}
+        }
+    }
+]);

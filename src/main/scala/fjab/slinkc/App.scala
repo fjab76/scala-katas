@@ -15,7 +15,7 @@ object App {
 
   def main(args: Array[String]) {
 
-    new Collector().collectLinks("http://elpais.com", 10)
+    new Collector().collectLinks("http://elpais.com", 3)
   }
 
 }

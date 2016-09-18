@@ -1,7 +1,8 @@
 package fjab.slinkc
 
-import java.util.Date
-import java.util.concurrent.TimeUnit
+import java.util
+import java.util.{Collections, Date}
+import java.util.concurrent.{CountDownLatch, TimeUnit}
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -9,9 +10,12 @@ import org.mongodb.scala._
 import org.mongodb.scala.bson._
 
 import _root_.scala.collection.mutable.Set
-import _root_.scala.concurrent.Await
+import scala.collection.mutable
+import scala.concurrent.{Future, Await}
 import _root_.scala.concurrent.duration.Duration
 import scala.annotation.tailrec
+import scala.collection.JavaConverters._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 /**
@@ -55,22 +59,38 @@ class Collector {
     }
 
     @tailrec
-    def collect(currentDepth: Int, currentLevelLinks: List[String], nextLevelLinks: Set[String]): Unit = {
+    def collect(currentDepth: Int, currentLevelLinks: mutable.Buffer[String], nextLevelLinks: java.util.Set[String]): Unit = {
       if (currentDepth != depthLimit) {
 
-        val childLinks: Set[String] = collectChildLinks(currentLevelLinks.head)
-        persist(currentLevelLinks.head, childLinks, currentDepth)
+        val countDownLatch: CountDownLatch = new CountDownLatch(currentLevelLinks.size)
+        currentLevelLinks.foreach(link => {
+          val f: Future[Set[String]] = Future {
+            collectChildLinks(link)
+          }
 
-        if (currentLevelLinks.tail.isEmpty) {
-          collect(currentDepth + 1, (nextLevelLinks ++ childLinks).toList, Set())
-        }
-        else {
-          collect(currentDepth, currentLevelLinks.tail, nextLevelLinks ++ childLinks)
-        }
+          f.onSuccess{
+            case childLinks => {
+              Future {persist(link, childLinks, currentDepth)}
+              nextLevelLinks.addAll(childLinks.asJava)//ATTENTION
+              countDownLatch.countDown
+            }
+          }
+
+          f.onFailure{
+            case t => {
+              println("error: " + t.getMessage)
+              countDownLatch.countDown
+            }
+          }
+        })
+
+        println("waiting for current level to complete: " + currentDepth)
+        countDownLatch.await
+        collect(currentDepth + 1, new util.ArrayList[String](nextLevelLinks).asScala, Collections.synchronizedSet(new java.util.HashSet[String]()))
       }
     }
 
-    collect(0, List(seed), Set())
+    collect(0, mutable.Buffer(seed), Collections.synchronizedSet(new java.util.HashSet[String]()))
   }
 
 
