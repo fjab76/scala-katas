@@ -1,4 +1,4 @@
-package fjab.slinkc
+package fjab.crawler
 
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -17,7 +17,7 @@ import scala.annotation.tailrec
 /**
  * Created by franciscoalvarez on 08/09/2016.
  */
-class Collector {
+object Crawler {
 
   // To directly connect to the default server localhost on port 27017
   val mongoClient: MongoClient = MongoClient()
@@ -25,6 +25,9 @@ class Collector {
   val collection: MongoCollection[BsonDocument] = database.getCollection("linkDocument");
 
 
+  def main (args: Array[String]){
+    collectLinks("http://www.bbc.co.uk", 2)
+  }
 
   def collectLinks(seed: String, depthLimit: Int) = {
 
