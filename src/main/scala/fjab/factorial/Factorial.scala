@@ -7,7 +7,7 @@ object Factorial {
 
   def tailRecursive(number:Int) : Int = {
     def tailRecursiveAcc (accumulator: Int, number: Int): Int = {
-      if (number == 1)
+      if (number == 0)
         return accumulator
       tailRecursiveAcc (number * accumulator, number - 1)
     }
@@ -15,9 +15,14 @@ object Factorial {
   }
 
   def notTailRecursive(number:Int) : Int = {
-    if (number == 1)
+    if (number == 0)
       return 1
     number * notTailRecursive (number - 1)
+  }
+
+  def factorial(number: Int): Int = number match {
+    case 0 => 1
+    case n => n * factorial(n - 1)
   }
 
 }
