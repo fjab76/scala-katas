@@ -1,4 +1,4 @@
-name := "slink-collector"
+name := "scala-katas"
 
 version := "1.0"
 
