@@ -1,5 +1,7 @@
-import org.scalatest.FunSuite
+package fjab
+
 import fjab.OptimalChange._
+import org.scalatest.FunSuite
 
 /**
  * Created by franciscoalvarez on 30/10/2016.
