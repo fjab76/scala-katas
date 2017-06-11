@@ -1,4 +1,4 @@
-package fjab
+package fjab.challenge
 
 /**
  * Created by franciscoalvarez on 30/10/2016.

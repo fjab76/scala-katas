@@ -1,7 +1,7 @@
-package fjab
+package fjab.challenge
 
+import fjab.challenge.Queens._
 import org.scalatest.FunSuite
-import fjab.Queens._
 
 /**
  * Created by franciscoalvarez on 19/05/2017.

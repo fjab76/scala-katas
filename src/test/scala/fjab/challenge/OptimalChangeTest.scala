@@ -1,6 +1,6 @@
-package fjab
+package fjab.challenge
 
-import fjab.OptimalChange._
+import fjab.challenge.OptimalChange._
 import org.scalatest.FunSuite
 
 /**
