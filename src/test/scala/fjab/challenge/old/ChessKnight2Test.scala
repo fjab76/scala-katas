@@ -1,6 +1,6 @@
-package fjab.challenge
+package fjab.challenge.old
 
-import fjab.challenge.ChessKnight2._
+import fjab.challenge.old.ChessKnight2._
 import org.scalatest.FunSpec
 
 /**

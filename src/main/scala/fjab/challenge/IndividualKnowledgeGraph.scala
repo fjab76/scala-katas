@@ -3,27 +3,27 @@ package fjab.challenge
 /**
  *
  */
-abstract class IndependentKnowledgeGraph[T] {
+abstract class IndividualKnowledgeGraph[T] {
 
-  type Point = (T, List[T], Set[T])
+  type Point = (T, List[T], Set[T]) //(current vertex, path to current vertex, explored vertices)
 
 
   def findPathToExploreAllVertices(from: T)(n: Int, m: Int): List[T] = {
 
     def isSolution(numExploredVertices: Int) = numExploredVertices == n * m - 1
 
-    def solution(verticesAhead: List[Point]): List[T] = verticesAhead match{
+    def traverseGraph(verticesAhead: List[Point]): List[T] = verticesAhead match{
       case Nil => Nil
       case (currentVertex, pathToCurrentVertex, exploredVertices) :: rest =>
         if(isSolution(exploredVertices.size)) pathToCurrentVertex
         else {
           val adjacentVertices = adj(currentVertex).filterNot(exploredVertices.contains(_))
           val adjacentPoints = adjacentVertices.map(vertex => (vertex, vertex :: pathToCurrentVertex, exploredVertices + vertex))
-          solution(addAdjPoints(rest,adjacentPoints))
+          traverseGraph(addAdjPoints(rest,adjacentPoints))
         }
     }
 
-    solution(List((from, List(), Set[T]()))) match{
+    traverseGraph(List((from, List(), Set[T]()))) match{
       case Nil => Nil
       case path => path.reverse
     }

@@ -1,16 +1,16 @@
 package fjab.challenge
 
 /**
- * Given an infinite chess board and a knight, calculate the shortest list of moves to reach a given position on the board
+ * Given an infinite chessboard and a knight, calculate the shortest list of moves to reach a given position on the board
  */
-class ChessKnightInfinite extends SharedKnowledgeGraph[Coordinate]{
+class ChessKnightInfinite extends CollectiveKnowledgeGraph[Coordinate]{
 
   val moves: List[Coordinate] = List((2,1), (1,2), (-1,2), (-2,1), (-2,-1), (-1,-2), (1,-2), (2,-1))
 
   override def adj(coordinate: Coordinate): List[Coordinate] = {
     val list = new scala.collection.mutable.ListBuffer[Coordinate]()
     moves.foreach{ tuple =>
-      list += ((coordinate._1 + tuple._1,coordinate._2 + tuple._2))
+      list += (coordinate + tuple)
     }
     list.toList
   }

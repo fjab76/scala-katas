@@ -6,6 +6,7 @@ package fjab
 package object challenge {
 
   type Coordinate = (Int, Int)
+  type Value = Int
 
   implicit class RichTuple2(tuple: Tuple2[Int,Int]){
     def +(other: (Int, Int)) = (tuple._1 + other._1, tuple._2 + other._2)
