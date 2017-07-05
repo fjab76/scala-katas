@@ -11,11 +11,11 @@ import fjab.challenge.old.NegativeBinaryOg.moves
  * The empty sequence represents 0
  *
  */
-object NegativeBinary extends HistoryAwareGraph[Value]{
+object NegativeBinary extends HistoryAwareGraph[Int]{
 
-  val moves: List[Value] = List(0, 1)
+  val moves: List[Int] = List(0, 1)
 
-  def findBinaryRepresentation(value: Value) = super.findPath(List((0, List(0)), (1, List(1))), value)
+  def findBinaryRepresentation(value: Int) = super.findPath(List((0, List(0)), (1, List(1))), value)
 
   override def adj(point: Point): List[Point] = {
     val value = point._1

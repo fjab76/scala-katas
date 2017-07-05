@@ -28,6 +28,18 @@ class NegativeBinaryTest extends FunSpec {
     it("should be List(1,0,0,1,1) for number 9"){
       assert(NegativeBinary.findBinaryRepresentation(9) == List(1,0,0,1,1))
     }
+
+    it("calc"){
+      val l = List(1,0,0,1,1)
+      //assert(l.fold(0)((x,y) => x + y) == 9)
+
+      var total = 0
+      for(n <- l.indices){
+        total += l(n) * BigInt(-2).pow(n).toInt
+      }
+
+      assert(total == 9)
+    }
   }
 
 
