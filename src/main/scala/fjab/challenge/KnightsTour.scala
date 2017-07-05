@@ -24,8 +24,8 @@ class KnightsTour(x: Int, y: Int) extends IndividualKnowledgeGraph[Coordinate]{
   }
 
 
-  override def addAdjPoints(list: List[Point], adjacentPoints: List[Point]): List[Point] =
-    adjacentPoints ++ list //depth-first search
+  override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
+    pathsToAdjacentVertices ++ listOfPaths //depth-first search
 
 
  }

@@ -5,25 +5,24 @@ package fjab.challenge
  */
 abstract class IndividualKnowledgeGraph[T] {
 
-  type Point = (T, List[T], Set[T]) //(current vertex, path to current vertex, explored vertices)
+  type Path = List[T]
 
+  def findPathToExploreAllVertices(from: T)(n: Int, m: Int): Path = {
 
-  def findPathToExploreAllVertices(from: T)(n: Int, m: Int): List[T] = {
+    def isSolution(numExploredVertices: Int) = numExploredVertices == n * m
 
-    def isSolution(numExploredVertices: Int) = numExploredVertices == n * m - 1
-
-    def traverseGraph(verticesAhead: List[Point]): List[T] = verticesAhead match{
+    def traverseGraph(verticesAhead: List[Path]): Path = verticesAhead match{
       case Nil => Nil
-      case (currentVertex, pathToCurrentVertex, exploredVertices) :: rest =>
-        if(isSolution(exploredVertices.size)) pathToCurrentVertex
+      case pathToCurrentVertex :: rest =>
+        if(isSolution(pathToCurrentVertex.size)) pathToCurrentVertex
         else {
-          val adjacentVertices = adj(currentVertex).filterNot(exploredVertices.contains(_))
-          val adjacentPoints = adjacentVertices.map(vertex => (vertex, vertex :: pathToCurrentVertex, exploredVertices + vertex))
-          traverseGraph(addAdjPoints(rest,adjacentPoints))
+          val adjacentVertices = adj(pathToCurrentVertex.head).filterNot(pathToCurrentVertex.contains(_))
+          val pathsToAdjacentVertices = adjacentVertices.map(vertex => vertex :: pathToCurrentVertex)
+          traverseGraph(addAdjPaths(rest,pathsToAdjacentVertices))
         }
     }
 
-    traverseGraph(List((from, List(), Set[T]()))) match{
+    traverseGraph(List(List(from))) match{
       case Nil => Nil
       case path => path.reverse
     }
@@ -31,6 +30,6 @@ abstract class IndividualKnowledgeGraph[T] {
   }
 
   def adj(vertex: T): List[T]
-  def addAdjPoints(list: List[Point], adjacentPoints: List[Point]): List[Point]
+  def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path]
 
 }
