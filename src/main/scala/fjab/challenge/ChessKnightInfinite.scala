@@ -19,6 +19,6 @@ class ChessKnightInfinite extends CollectiveKnowledgeGraph[Coordinate]{
    * The nature of the problem requires a breadth-first search in order to find the shortest path.
    * Observation: in an infinite chess board, only a search for the shortest path is viable
    */
-  override def addAdjPoints(list: List[Point], adjacentPoints: List[Point]): List[Point] =
-    list ++ adjacentPoints
+  override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
+    listOfPaths ++ pathsToAdjacentVertices
 }

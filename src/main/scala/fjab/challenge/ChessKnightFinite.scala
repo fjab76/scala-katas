@@ -20,6 +20,6 @@ class ChessKnightFinite(x: Int, y: Int) extends CollectiveKnowledgeGraph[Coordin
   /**
    * The nature of the problem requires a breadth-first search in order to find the shortest path
    */
-  override def addAdjPoints(list: List[Point], adjacentPoints: List[Point]): List[Point] =
-    list ++ adjacentPoints //breadth-first search
+  override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
+    listOfPaths ++ pathsToAdjacentVertices
 }
