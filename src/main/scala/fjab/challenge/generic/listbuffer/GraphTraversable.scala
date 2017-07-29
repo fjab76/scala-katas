@@ -1,4 +1,6 @@
-package fjab.challenge.generic
+package fjab.challenge.generic.listbuffer
+
+import scala.collection.mutable.ListBuffer
 
 /**
  *
@@ -26,17 +28,21 @@ abstract class GraphTraversable[T] {
     * @param seed Initial paths used as a seed to calculate the rest of the paths
     * @return Path The searched path or Nil if the desired path does not exist
     */
-  def findPath(seed: List[Path]): Path = {
+  def findPath(seed: ListBuffer[Path]): Path = {
 
-    def traverseGraph(verticesAhead: List[Path]): Path = verticesAhead match{
-      case Nil => Nil
-      case pathToCurrentVertex :: rest =>
-        if(isSolution(pathToCurrentVertex)) pathToCurrentVertex
-        else {
-          val adjacentVertices = adjVertices(pathToCurrentVertex.head).filter(isVertexEligibleForPath(_, pathToCurrentVertex))
-          val pathsToAdjacentVertices = adjacentVertices.map(_ :: pathToCurrentVertex)
-          traverseGraph(addAdjPaths(rest,pathsToAdjacentVertices))
-        }
+    def traverseGraph(candidatePaths: ListBuffer[Path]): Path = {
+      candidatePaths.headOption match {
+        case None => Nil
+        case Some(pathToCurrentVertex) =>
+          if (isSolution (pathToCurrentVertex) ) pathToCurrentVertex
+          else {
+            val adjacentVertices = adjVertices (pathToCurrentVertex.head).filter (isVertexEligibleForPath (_, pathToCurrentVertex) )
+            val pathsToAdjacentVertices = adjacentVertices.map (_ :: pathToCurrentVertex)
+            candidatePaths.remove (0)
+            addAdjPaths (candidatePaths, pathsToAdjacentVertices)
+            traverseGraph (candidatePaths)
+          }
+      }
     }
 
     traverseGraph(seed) match{
@@ -62,7 +68,7 @@ abstract class GraphTraversable[T] {
     * infinite graph
     *
     */
-  def addAdjPaths(remainingPathsToExplore: List[Path], pathsToAdjacentVertices: List[Path]): List[Path]
+  def addAdjPaths(remainingPathsToExplore: ListBuffer[Path], pathsToAdjacentVertices: List[Path])
 
 
   /**

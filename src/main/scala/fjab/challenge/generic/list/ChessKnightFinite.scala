@@ -1,9 +1,9 @@
-package fjab.challenge.generic
+package fjab.challenge.generic.list
 
 /**
- * Given an infinite chessboard and a knight, calculate the shortest list of moves to reach a given position on the board
+ * Given a finite chessboard and a knight, calculate the shortest list of moves to reach a given position on the board
  */
-class ChessKnightInfinite(to: Coordinate) extends GraphTraversable[Coordinate]{
+class ChessKnightFinite(to: Coordinate)(x: Int, y: Int) extends GraphTraversable[Coordinate]{
 
   val moves: List[Coordinate] = List((2,1), (1,2), (-1,2), (-2,1), (-2,-1), (-1,-2), (1,-2), (2,-1))
 
@@ -12,14 +12,15 @@ class ChessKnightInfinite(to: Coordinate) extends GraphTraversable[Coordinate]{
   override def adjVertices(coordinate: Coordinate): List[Coordinate] = {
     val list = new scala.collection.mutable.ListBuffer[Coordinate]()
     moves.foreach{ move =>
-      list += (coordinate + move)
+      val (v, w) = coordinate + move
+      if(v >= 0 && v < x && w >=0 && w<y)
+        list += ((v,w))
     }
     list.toList
   }
 
   /**
-   * The nature of the problem requires a breadth-first search in order to find the shortest path.
-   * Observation: in an infinite chess board, only a search for the shortest path is viable
+   * The nature of the problem requires a breadth-first search in order to find the shortest path
    */
   override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
     listOfPaths ++ pathsToAdjacentVertices

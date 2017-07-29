@@ -1,9 +1,9 @@
-package fjab.challenge
+package fjab.challenge.generic
 
 /**
   * Created by franciscoalvarez on 05/07/2017.
   */
-package object generic {
+package object list {
 
   type Coordinate = (Int, Int)
 

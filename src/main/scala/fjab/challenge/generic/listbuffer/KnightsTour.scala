@@ -1,4 +1,6 @@
-package fjab.challenge.generic
+package fjab.challenge.generic.listbuffer
+
+import scala.collection.mutable.ListBuffer
 
 /**
   * Created by franciscoalvarez on 11/06/2017.
@@ -11,7 +13,7 @@ class KnightsTour(x: Int, y: Int) extends GraphTraversable[Coordinate]{
 
   val moves: List[Coordinate] = List((2,1), (1,2), (-1,2), (-2,1), (-2,-1), (-1,-2), (1,-2), (2,-1))
 
-  def findTour(from: Coordinate) = super.findPath(List(List(from)))
+  def findTour(from: Coordinate) = super.findPath(new ListBuffer() += (List(from)))
 
   override def adjVertices(coordinate: Coordinate): List[Coordinate] = {
     val list = new scala.collection.mutable.ListBuffer[Coordinate]()
@@ -24,8 +26,8 @@ class KnightsTour(x: Int, y: Int) extends GraphTraversable[Coordinate]{
   }
 
 
-  override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
-    pathsToAdjacentVertices ++ listOfPaths //depth-first search
+  override def addAdjPaths(listOfPaths: ListBuffer[Path], pathsToAdjacentVertices: List[Path]) =
+    listOfPaths.prependAll(pathsToAdjacentVertices) //depth-first search
 
 
   override def isSolution(path: Path): Boolean = path.length == x * y

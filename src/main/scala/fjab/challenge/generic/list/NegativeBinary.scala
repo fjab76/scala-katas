@@ -1,4 +1,4 @@
-package fjab.challenge.generic
+package fjab.challenge.generic.list
 
 /**
  * Created by franciscoalvarez on 04/06/2017.
