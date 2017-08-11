@@ -1,4 +1,4 @@
-package fjab.challenge.generic.list
+package fjab.challenge.graph.list
 
 /**
  * Created by franciscoalvarez on 04/06/2017.
@@ -18,15 +18,15 @@ package fjab.challenge.generic.list
   * - the succession of 0s and 1s in a path is interpreted as a binary representation
   *
  */
-class NegativeBinary(int: Int) extends GraphTraversable[Int]{
+class NegativeBinary(int: Int) extends GraphTraverser[Int]{
 
   val moves: List[Int] = List(0, 1)
 
   def findShortestBinaryRepresentation() = findPath(List(List(0),List(1)))
 
-  override def adjVertices(vertex: Int): List[Int] = moves
+  override def neighbours(vertex: Int): List[Int] = moves
 
-  override def addAdjPaths(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
+  override def addPathsToNeighbours(listOfPaths: List[Path], pathsToAdjacentVertices: List[Path]): List[Path] =
     listOfPaths ++ pathsToAdjacentVertices //breadth-first search
 
   override def isSolution(path: Path): Boolean = {

@@ -1,9 +1,9 @@
-package fjab.challenge.generic.list
+package fjab.challenge.graph.stream
 
 /**
  *
  */
-abstract class GraphTraversable[T] {
+abstract class GraphTraverser[T] {
 
   type Path = List[T]
 
@@ -26,31 +26,25 @@ abstract class GraphTraversable[T] {
     * @param seed Initial paths used as a seed to calculate the rest of the paths
     * @return Path The searched path or Nil if the desired path does not exist
     */
-  def findPath(seed: List[Path]): Path = {
+  def findPath(seed: List[Path]): Stream[Path] = {
 
-    def traverseGraph(candidatePaths: List[Path]): Path = candidatePaths match{
-      case Nil => Nil
-      case pathToCurrentVertex :: rest =>
-        if(isSolution(pathToCurrentVertex)) pathToCurrentVertex
-        else {
-          val adjacentVertices = adjVertices(pathToCurrentVertex.head).filter(isVertexEligibleForPath(_, pathToCurrentVertex))
+    def traverseGraph(candidatePaths: Stream[Path], exploredVertices: Set[T]): Stream[Path] =
+      candidatePaths match {
+        case Stream.Empty => Stream.Empty
+        case pathToCurrentVertex #:: rest =>
+          val adjacentVertices = neighbours(pathToCurrentVertex.head)/*.filterNot(exploredVertices.contains)*/.filter(isVertexEligibleForPath(_, pathToCurrentVertex))
           val pathsToAdjacentVertices = adjacentVertices.map(_ :: pathToCurrentVertex)
-          traverseGraph(addAdjPaths(rest,pathsToAdjacentVertices))
-        }
+          pathToCurrentVertex #:: traverseGraph(addPathsToNeighbours(rest,pathsToAdjacentVertices), exploredVertices + pathToCurrentVertex.head)
     }
 
-    traverseGraph(seed) match{
-      case Nil => Nil
-      case path => path.reverse
-    }
-
+    traverseGraph(seed.toStream, Set()).filter(isSolution)
   }
 
   /**
-    * The implementation to calculate the adjacent vertices is dependant on the nature of the graph: moves allowed
+    * The implementation to calculate the neighbours to a vertex is dependent on the nature of the graph: moves allowed
     * from one vertex to another, constraints, etc.
     */
-  def adjVertices(vertex: T): List[T]
+  def neighbours(vertex: T): List[T]
 
   /**
     * This method adds the newly calculated paths to the neighbours, to the list of remaining paths to explore.
@@ -62,7 +56,7 @@ abstract class GraphTraversable[T] {
     * infinite graph
     *
     */
-  def addAdjPaths(remainingPathsToExplore: List[Path], pathsToAdjacentVertices: List[Path]): List[Path]
+  def addPathsToNeighbours(remainingPathsToExplore: Stream[Path], pathsToNeighbours: List[Path]): Stream[Path]
 
 
   /**

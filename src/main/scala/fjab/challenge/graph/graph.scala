@@ -1,9 +1,9 @@
-package fjab.challenge.generic
+package fjab.challenge
 
 /**
-  * Created by franciscoalvarez on 29/07/2017.
+  * Created by franciscoalvarez on 05/07/2017.
   */
-package object listbuffer {
+package object graph {
 
   type Coordinate = (Int, Int)
 
@@ -11,4 +11,5 @@ package object listbuffer {
     def +(other: Coordinate) = (coordinate._1 + other._1, coordinate._2 + other._2)
     def -(other: Coordinate) = (coordinate._1 - other._1, coordinate._2 - other._2)
   }
+
 }

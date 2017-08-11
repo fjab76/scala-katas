@@ -1,4 +1,4 @@
-package fjab.challenge.generic.list
+package fjab.challenge.graph.listbuffer
 
 import org.scalatest.FunSpec
 
